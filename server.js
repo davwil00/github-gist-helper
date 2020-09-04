@@ -16,7 +16,7 @@ app.use(bodyParser.json())
 app.listen(port)
 
 
-app.patch('/patch/:gistId', (req, res) => {
+app.patch('/:gistId', (req, res) => {
   const gistId = req.params.gistId
   response = patchGist(gistId, req.body)
   res.send(response ? 200 : 500)
