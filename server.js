@@ -1,4 +1,4 @@
-const port = process.env.PORT || 8001
+const port = process.env.PORT || 8002
 
 if (!process.env.GITHUB_TOKEN) {
   console.error('No github token provided, please set GITHUB_TOKEN env var')
@@ -16,7 +16,7 @@ app.use(bodyParser.json())
 app.listen(port)
 
 
-app.get('/patch/:gistId', (req, res) => {
+app.patch('/patch/:gistId', (req, res) => {
   const gistId = req.params.gistId
   response = patchGist(gistId, req.body)
   res.send(response ? 200 : 500)
