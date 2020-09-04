@@ -19,7 +19,7 @@ app.listen(port)
 app.patch('/:gistId', (req, res) => {
   const gistId = req.params.gistId
   response = patchGist(gistId, req.body)
-  res.send(response ? 200 : 500)
+  res.sendStatus(response ? 200 : 500)
 })
 
 function patchGist(gistId, data) {
