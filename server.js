@@ -10,13 +10,20 @@ if (!process.env.GITHUB_TOKEN) {
 const { request } = require('@octokit/request')
 const express = require('express')
 const bodyParser = require('body-parser')
+const cors = require('cors')
 
 const app = express()
 app.use(bodyParser.json())
+app.use(cors())
 app.listen(port)
 
+const corsOptions = {
+  origin: ['https://gloomhaven.davwil00.co.uk', 'localhost']
+}
 
-app.patch('/:gistId', (req, res) => {
+app.options('/:gistId', cors(corsOptions))
+
+app.patch('/:gistId', cors(corsOptions), (req, res) => {
   const gistId = req.params.gistId
   response = patchGist(gistId, req.body)
   res.sendStatus(response ? 200 : 500)
