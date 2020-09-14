@@ -29,6 +29,10 @@ app.patch('/:gistId', cors(corsOptions), (req, res) => {
   res.sendStatus(response ? 200 : 500)
 })
 
+app.get('/status', (req, res) => {
+  res.send('UP')
+})
+
 function patchGist(gistId, data) {
   const requestWithAuth = request.defaults({
     headers: {
