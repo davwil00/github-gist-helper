@@ -11,6 +11,7 @@ const { request } = require('@octokit/request')
 const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
+const { response } = require('express')
 
 const app = express()
 app.use(bodyParser.json())
@@ -23,10 +24,11 @@ const corsOptions = {
 
 app.options('/:gistId', cors(corsOptions))
 
-app.patch('/:gistId', cors(corsOptions), (req, res) => {
+app.patch('/:gistId', cors(corsOptions), async (req, res) => {
   const gistId = req.params.gistId
-  response = patchGist(gistId, req.body)
-  res.sendStatus(response ? 200 : 500)
+  const data = req.body
+  const response = await patchGist(gistId, data)
+  res.sendStatus(response.status, response.body)
 })
 
 app.get('/status', (req, res) => {
@@ -48,13 +50,15 @@ function patchGist(gistId, data) {
       }
     }
   }).then((response) => {
-    if (response.status === 200) {
-      return true
-    } else {
-        console.error(response.status)
-        console.error(response.data)
-        return false
+    if (response.status !== 200) {
+        console.error('Non-200 response', response.status)
+        console.error('Response body', response.data)
     }
+
+    return response
   })
-  .catch((err) => console.error(err))
+  .catch((err) => {
+    console.error('A bad thing happened', err)
+    return {status: err.status, body: err}
+  })
 }
