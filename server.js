@@ -12,8 +12,6 @@ const { request } = require('@octokit/request')
 const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
-const { response } = require('express')
-const {all} = require("express/lib/application");
 
 const app = express()
 app.use(bodyParser.json())
@@ -33,7 +31,7 @@ app.patch('/:gistId', cors(corsOptions), async (req, res) => {
   }
   const data = req.body
   const response = await patchGist(gistId, data)
-  res.sendStatus(response.status, response.body)
+  res.status(response.status).send(response.body)
 })
 
 app.get('/status', (req, res) => {
